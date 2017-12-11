@@ -1,0 +1,31 @@
+#eureka 配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: web
+  cloud:
+    config:
+      profile: dev,cloud
+#      uri: http://localhost:8888   这是不整合eureka，直接url获取
+      discovery:    #用eureka来发现config服务
+        enabled: true
+        service-id: config
+server:
+  port: 8080
+
+#actuator 配置
+endpoints:
+  actuator:
+    enabled: true
+  env:
+    enabled: true
+    sensitive: true
+  beans:
+    enabled: true
+management:
+  security:
+    enabled: false
