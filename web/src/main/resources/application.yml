@@ -13,13 +13,15 @@ eureka:
 spring:
   application:
     name: web
+##   加载规则config-server端，1.application.yml中指定profile; 2.{application.name】-{profile}-{label}.yml(这里是web-dev.yml)中指定profile
   cloud:
     config:
-      profile: dev,cloud
+      profile: dev
 #      uri: http://localhost:8888   这是不整合eureka，直接url获取
       discovery:    #用eureka来发现config服务
         enabled: true
         service-id: config
+
 server:
   port: 8080
 

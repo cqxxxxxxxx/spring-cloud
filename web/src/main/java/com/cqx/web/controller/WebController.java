@@ -21,18 +21,18 @@ public class WebController {
     @Autowired
     HystrixService hystrixService;
 
-//    @Value("${info.description}")
-//    String descFromConfig;
+    @Value("${name}")
+    String nameFromConfig;
 
     @RequestMapping("/")
     public String home() {
         return "Hello World!";
     }
 
-//    @GetMapping("/config/desc")
-//    public String configDesc() {
-//        return descFromConfig;
-//    }
+    @GetMapping("/config/desc")
+    public String nameFromConfig() {
+        return nameFromConfig;
+    }
 
     @GetMapping("/provider")
     public String getProviderInfo() {
