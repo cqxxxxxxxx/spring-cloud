@@ -19,7 +19,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-
+  instance:
+    hostname: localhost
+    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
+    lease-renewal-interval-in-seconds: 2 #配置在服务提供端，renew的频率 这里是2s发一次
 logging:
   level: debug
 
