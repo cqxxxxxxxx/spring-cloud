@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: zuul
+server:
+  port: 9000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+zuul:
+  host:
+    connect-timeout-millis: 1200000
+    socket-timeout-millis: 120000
+  routes:
+    redirect-api:
+      path: /baidu/*
+      url: http://www.baidu.com/
+    web-api:
+      path: /web/**
+      serviceId: web
+      stripPrefix: false
