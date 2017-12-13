@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Created by BG307435 on 2017/12/11.
  */
-@Component
 @FeignClient(name = "provider", fallback = WebClientImpl.class)
 public interface WebClient {
 

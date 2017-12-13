@@ -8,7 +8,7 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
     fetch-registry: true  #是否从euraka上拉取服务 默认true
-    registry-fetch-interval-seconds: 3 #30s从euraka上拉取一次服务列表 默认30s
+    registry-fetch-interval-seconds: 3 #3s从euraka上拉取一次服务列表 默认30s
 
 spring:
   application:
