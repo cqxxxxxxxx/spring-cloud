@@ -20,3 +20,6 @@ zuul:
       path: /web/**
       serviceId: web
       stripPrefix: false
+
+## 一般接口调用在这一层整合ribbon，提供负载均衡。 默认通过 Apache HTTP Client转发请求，可以替换成okHttp之类或者自己添加一些处理细节。
+##  更多细节请看官网文档 https://cloud.spring.io/spring-cloud-static/Edgware.RELEASE/single/spring-cloud.html#netflix-zuul-starter
