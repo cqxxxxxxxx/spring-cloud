@@ -1,4 +1,4 @@
-FROM java:openjdk-openjdk-8-jdk
+FROM java:openjdk-8-jdk
 
 MAINTAINER cqxxxxxxxx@gmail.com
 
