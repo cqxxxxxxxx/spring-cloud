@@ -21,10 +21,10 @@ spring:
       discovery:    #用eureka来发现config服务
         enabled: true
         service-id: config
-  datasource:
-    url: jdbc:mysql://localhost:3306/somethingnew?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 123456
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/somethingnew?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 123456
   data:
     mongodb:
       uri: mongodb://cqx:cqx@47.92.6.210:27017/pikachu
