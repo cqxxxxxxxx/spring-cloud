@@ -21,10 +21,41 @@ spring:
       discovery:    #用eureka来发现config服务
         enabled: true
         service-id: config
+  datasource:
+    url: jdbc:mysql://localhost:3306/somethingnew?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+  data:
+    mongodb:
+      uri: mongodb://cqx:cqx@47.92.6.210:27017/pikachu
+  mvc:
+    view:
+        prefix:
+        suffix: .html
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true
+      exclude: static/**,templates/**
+    livereload:
+      enabled: true
+    remote:
+      debug:
+        enabled: true
+
+#github:
+#  oauth2:
+#    client:
+#      id: f875735a0ca1cc8b0da2
+#      secret: 3f08b906ffb0350105721be1152f7c9a16a93626
+#      redirectUri: http://localhost:8080
 
 server:
   port: 8080
 
+logging:
+  level: debug
 #actuator 配置
 endpoints:
   actuator:
