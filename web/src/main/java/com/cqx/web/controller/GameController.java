@@ -38,6 +38,8 @@ public class GameController {
     public String hallMessage(String message, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
         Map map = headerAccessor.getSessionAttributes();
+        //当前session的id
+        System.out.println(map.get(SimpMessageHeaderAccessor.SESSION_ID_HEADER));
         return message;
     }
 

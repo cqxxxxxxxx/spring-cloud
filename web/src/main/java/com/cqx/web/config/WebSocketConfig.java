@@ -1,24 +1,31 @@
 package com.cqx.web.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
-import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.GenericMessage;
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
-
-import java.util.List;
+import org.springframework.web.socket.messaging.*;
 
 /**
  * Created by BG307435 on 2018/2/5.
  */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+
+    @Bean
+    public WebSocketListener webSocketListener() {
+        return new WebSocketListener();
+    }
 
     /**
      * Register STOMP endpoints mapping each to a specific URL and (optionally)
@@ -55,34 +62,113 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
 
-    @Override
-    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
-
-    }
-
+    /**
+     * 添加拦截器
+     *
+     * @param registration
+     */
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-
+        registration.setInterceptors(new WebSocketChannelInterceptor());
     }
 
-    @Override
-    public void configureClientOutboundChannel(ChannelRegistration registration) {
+    /**
+     * 监听器 监听socket连接之类操作
+     */
+    private class WebSocketListener {
 
+        @EventListener
+        public void onSessionConnect(SessionConnectEvent sessionConnectEvent) {
+            System.out.println("session connect received ~~~~~~~~~");
+            System.out.println(sessionConnectEvent.getSource());
+            System.out.println(sessionConnectEvent.getMessage());
+            System.out.println(sessionConnectEvent.getUser());
+            System.out.println(sessionConnectEvent.getTimestamp());
+            System.out.println(sessionConnectEvent.toString());
+
+            GenericMessage message = (GenericMessage) sessionConnectEvent.getMessage();
+            System.out.println(message.toString());
+
+            MessageHeaders headers = message.getHeaders();
+            System.out.println(headers.toString());
+        }
+
+        @EventListener
+        public void onSessionConnected(SessionConnectedEvent sessionConnectedEvent) {
+            System.out.println("session connected ~~~~~~~~~");
+            System.out.println(sessionConnectedEvent.getSource());
+            System.out.println(sessionConnectedEvent.getMessage());
+            System.out.println(sessionConnectedEvent.getUser());
+            System.out.println(sessionConnectedEvent.getTimestamp());
+            System.out.println(sessionConnectedEvent.toString());
+        }
+
+        @EventListener
+        public void onSessionDisconnect(SessionDisconnectEvent sessionDisconnectEvent) {
+            System.out.println("session disconnect ~~~~~~~~~");
+            System.out.println(sessionDisconnectEvent.getSource());
+            System.out.println(sessionDisconnectEvent.getMessage());
+            System.out.println(sessionDisconnectEvent.getUser());
+            System.out.println(sessionDisconnectEvent.getTimestamp());
+            System.out.println(sessionDisconnectEvent.toString());
+        }
+
+        @EventListener
+        public void onSessionSubscribe(SessionSubscribeEvent sessionSubscribeEvent) {
+            System.out.println("session subscribe ~~~~~~~~~");
+            System.out.println(sessionSubscribeEvent.getSource());
+            System.out.println(sessionSubscribeEvent.getMessage());
+            System.out.println(sessionSubscribeEvent.getUser());
+            System.out.println(sessionSubscribeEvent.getTimestamp());
+            System.out.println(sessionSubscribeEvent.toString());
+        }
+
+
+        @EventListener
+        public void onSessionUnsubscribe(SessionUnsubscribeEvent sessionUnsubscribeEvent) {
+            System.out.println("session unsubscribe ~~~~~~~~~");
+            System.out.println(sessionUnsubscribeEvent.getSource());
+            System.out.println(sessionUnsubscribeEvent.getMessage());
+            System.out.println(sessionUnsubscribeEvent.getUser());
+            System.out.println(sessionUnsubscribeEvent.getTimestamp());
+            System.out.println(sessionUnsubscribeEvent.toString());
+        }
     }
 
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    /**
+     * 拦截器
+     */
+    private class WebSocketChannelInterceptor extends ChannelInterceptorAdapter {
 
-    }
+        @Override
+        public Message<?> preSend(Message<?> message, MessageChannel channel) {
+            return null;
+        }
 
-    @Override
-    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+        @Override
+        public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
 
-    }
+        }
 
-    @Override
-    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-        return false;
+        @Override
+        public void afterSendCompletion(Message<?> message, MessageChannel channel, boolean sent, Exception ex) {
+
+        }
+
+        @Override
+        public boolean preReceive(MessageChannel channel) {
+            return false;
+        }
+
+        @Override
+        public Message<?> postReceive(Message<?> message, MessageChannel channel) {
+            return null;
+        }
+
+        @Override
+        public void afterReceiveCompletion(Message<?> message, MessageChannel channel, Exception ex) {
+
+        }
     }
 
 
