@@ -7,7 +7,7 @@ ARG MODULE
 ARG PROFILE=default
 ENV MODULE=${MODULE}
 ENV PROFILE=${PROFILE}
-RUN mkdir -r /app
+RUN mkdir -p /app
 WORKDIR /app
 COPY ${MODULE}/target/*.jar app.jar
 ENV JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=${PROFILE}'
