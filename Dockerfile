@@ -2,7 +2,6 @@ FROM java:openjdk-8-jdk
 
 MAINTAINER cqxxxxxxxx@gmail.com
 
-EXPOSE 80
 ARG MODULE
 ARG PROFILE=default
 ENV MODULE=${MODULE}
