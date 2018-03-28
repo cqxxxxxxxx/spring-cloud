@@ -5,7 +5,8 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/cqxxxxxxxx/storage
+          uri: https://github.com/cqxxxxxxxx/repo
+          searchPaths: spring-cloud-config
           username:
           password:
 eureka:
