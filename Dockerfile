@@ -11,4 +11,4 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY ${MODULE}/target/*.jar app.jar
 ENV JAVA_OPTS='-Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=${PROFILE}'
-ENTRYPOINT exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+ENTRYPOINT exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar
