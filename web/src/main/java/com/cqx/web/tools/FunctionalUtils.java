@@ -7,5 +7,8 @@ import java.util.function.Consumer;
  */
 public class FunctionalUtils {
 
+    private FunctionalUtils() {
+    }
+
     public static final Consumer<Object> PRINT = System.out::print;
 }

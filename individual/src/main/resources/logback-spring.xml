@@ -8,7 +8,7 @@
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${app.log.path:-D:\\}individual.%d{yyyy-MM-dd}.log</file>
+        <file>${/root/logs/:-D:\\}individual.log</file>
         <encoder>
             <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
         </encoder>
