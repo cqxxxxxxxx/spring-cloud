@@ -5,7 +5,59 @@
     <title>Title</title>
 </head>
 <body>
-containerId:
-<span th:text="${id}"></span>
+containerId:<span th:text="${id}"></span>
+
+
+<div>
+    key:<input type="text" id="key">
+    value:<input type="text" id="value">
+    <button id="submit">提交</button>
+</div>
+<br/>
+<div>
+    key:<input type="text" id="getKey">
+    value:<span id="getValue"></span>
+    <button id="get">提交</button>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#submit').on('click', function (e) {
+        var key = $('#key').val();
+        var value = $('#value').val();
+        $.ajax({
+            url: "/redis",
+            type: "post",
+            data: {
+                key: key,
+                value: value
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (req, status, error) {
+                console.log(req, status, error);
+            }
+        })
+    });
+
+    $('#get').on('click', function (e) {
+        var getKey = $('#getKey').val();
+        var value = $('#getValue');
+        $.ajax({
+            url: "/redis/" + getKey,
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                value.text(data);
+                console.log(data);
+            },
+            error: function (req, status, error) {
+                console.log(req, status, error);
+            }
+        })
+    })
+</script>
 </body>
 </html>
