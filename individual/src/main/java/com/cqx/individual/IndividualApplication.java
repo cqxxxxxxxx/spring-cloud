@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +15,17 @@ import org.springframework.web.bind.annotation.*;
  */
 @SpringBootApplication
 @RestController
-public class IndividualApplication {
+public class IndividualApplication extends SpringBootServletInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(IndividualApplication.class);
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(IndividualApplication.class);
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(IndividualApplication.class, args);
