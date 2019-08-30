@@ -3,23 +3,56 @@ spring:
     name: zuul
 server:
   port: 9000
+zuul:
+  routes:
+    provider:
+      path: /provider/**
+      serviceId: provider
+      stripPrefix: true
+    web:
+      path: /web/**
+      serviceId: web-service
+      stripPrefix: true
+  sensitive-headers:
+  retryable: false #不重试
+
+hystrix:
+  command:
+    web-service:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+web-service:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: http://localhost:10000
+    ConnectTimeout: 1000
+    ReadTimeout: 3000
+    MaxTotalHttpConnections: 500
+    MaxConnectionsPerHost: 100
+
+
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-zuul:
-  host:
-    connect-timeout-millis: 1200000
-    socket-timeout-millis: 120000
-  routes:
-    redirect-api:
-      path: /baidu/*
-      url: http://www.baidu.com/
-    web-api:
-      path: /web/**
-      serviceId: web
-      stripPrefix: false
+      #Authenticating with the Eureka Server => 需要eureka-server端进行添加支持
+      #http://user:password@localhost:8761/eureka 基于http的authentication会自动触发，如果你的路径是这样写的。
+      #如果要更加复杂的服务注册认证，需要1. create a @Bean of type DiscoveryClientOptionalArgs =>  2. inject ClientFilter instances into it
+      defaultZone: http://peer1:9001/eureka/,http://peer2:9002/eureka/
+    prefer-same-zone-eureka: true #倾向于调用同一个zone的服务
+  instance:
+    hostname: zuul
+    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
+    lease-renewal-interval-in-seconds: 2  #配置在服务提供端，renew的频率 这里是2s发一次
+    health-check-url: ${server.servletPath}/health
+    status-page-url: ${server.servletPath}/info
 
-## 一般接口调用在这一层整合ribbon，提供负载均衡。 默认通过 Apache HTTP Client转发请求，可以替换成okHttp之类或者自己添加一些处理细节。
-##  更多细节请看官网文档 https://cloud.spring.io/spring-cloud-static/Edgware.RELEASE/single/spring-cloud.html#netflix-zuul-starter
+#actuator 配置
+management:
+  endpoints:
+    enabled-by-default: true
+#  server:
+#    port: 11000
+debug: true

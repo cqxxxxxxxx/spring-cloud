@@ -1,48 +1,41 @@
 #eureka 配置
 eureka:
   instance:
-    hostname: localhost
-    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
-    lease-renewal-interval-in-seconds: 2 #配置在服务提供端，renew的频率 这里是2s发一次
+    hostname: web
+    metadata-map:
+      zone: zone1
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://peer1:9001/eureka/
     fetch-registry: true  #是否从euraka上拉取服务 默认true
-    registry-fetch-interval-seconds: 3 #3s从euraka上拉取一次服务列表 默认30s
+    register-with-eureka: true
+    registry-fetch-interval-seconds: 30 #30s从eureka上更新一次注册表
 
 spring:
   application:
     name: web
 ##   加载规则config-server端，1.application.yml中指定profile; 2.{application.name】-{profile}-{label}.yml(这里是web-dev.yml)中指定profile
-  cloud:
-    config:
-      profile: dev
-#      uri: http://localhost:8888   这是不整合eureka，直接url获取
-      discovery:    #用eureka来发现config服务
-        enabled: true
-        service-id: config
+#  cloud:
+#    config:
+#      profile: dev
+##      uri: http://localhost:8888   这是不整合eureka，直接url获取
+#
+#      discovery:    #用eureka来发现config服务
+#        enabled: true
+#        service-id: config
 #  datasource:
 #    url: jdbc:mysql://localhost:3306/somethingnew?useUnicode=true&characterEncoding=utf-8
 #    username: root
 #    password: 123456
-  data:
-    mongodb:
-      uri: mongodb://cqx:cqx@47.92.6.210:27017/pikachu
+#  data:
+#    mongodb:
+#      uri: mongodb://cqx:cqx@47.92.6.210:27017/pikachu
   mvc:
     view:
         prefix:
         suffix: .html
   thymeleaf:
     cache: false
-  devtools:
-    restart:
-      enabled: true
-      exclude: static/**,templates/**
-    livereload:
-      enabled: true
-    remote:
-      debug:
-        enabled: true
 
 #github:
 #  oauth2:
@@ -52,19 +45,16 @@ spring:
 #      redirectUri: http://localhost:8080
 
 server:
-  port: 8080
+  port: 10000
 
 logging:
-  level: debug
+  level:
+    root: debug
 #actuator 配置
-endpoints:
-  actuator:
-    enabled: true
-  env:
-    enabled: true
-    sensitive: true
-  beans:
-    enabled: true
 management:
-  security:
-    enabled: false
+  endpoints:
+    enabled-by-default: true
+  server:
+    port: 11000
+
+name: cqx

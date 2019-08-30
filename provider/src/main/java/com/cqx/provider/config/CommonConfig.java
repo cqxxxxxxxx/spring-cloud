@@ -16,7 +16,7 @@ public class CommonConfig {
 
     @Bean(name = "asyncExecutor1")
     public Executor asyncExecutor() {
-        Executor executor = new ThreadPoolExecutor(1, 0, 5000L,
+        Executor executor = new ThreadPoolExecutor(1, 1, 5000L,
                 TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         return executor;
     }

@@ -23,8 +23,8 @@ public class GameController {
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
 
-    @Autowired
-    GameClient gameClient;
+//    @Autowired
+//    GameClient gameClient;
 
     private SimpMessagingTemplate template;
 

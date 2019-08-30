@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: eureka-server
+server:
+  port: 8761
+eureka:
+# ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}
+  instance:
+    hostname: localhost
+#    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
+#    lease-renewal-interval-in-seconds: 2     #配置在服务提供端，renew的频率 这里是2s发一次
+  client:
+    register-with-eureka: false   #不吧自己注册为服务
+  server:
+    enable-self-preservation: false  #关闭自我保护
+    eviction-interval-timer-in-ms: 10000  #配置在euraka-server端失效时间 10s扫描一次有没有失效服务，检测标准就是超过配置在服务端的失效时间没有renew的服务
+    fetch-registry: false  #是否从euraka上拉取注册了的服务列表，默认true，因为这个是euraka-server 所以不需要，需要配置在消费端。

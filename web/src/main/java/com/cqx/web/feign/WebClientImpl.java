@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class WebClientImpl implements WebClient {
     @Override
     public String info() {
+        System.out.println("fallback");
         return null;
     }
 }

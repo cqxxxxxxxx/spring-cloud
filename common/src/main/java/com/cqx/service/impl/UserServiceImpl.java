@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+//    @Autowired
     UserRepository userRepository;
-    @Autowired
+//    @Autowired
     UserHomeRepository userHomeRepository;
-    @Autowired
+//    @Autowired
     UserFriendRepository userFriendRepository;
 
     @Override
@@ -58,16 +58,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserHomeEntity findUserHome(String uid) {
-        return userHomeRepository.findOne(uid);
+//        return userHomeRepository.findOne(uid);
+        return null;
     }
+
 
     @Override
     public UserEntity findUserDetail(String uid) {
-        UserEntity user = userRepository.findOne(uid);
-        UserHomeEntity userHome = userHomeRepository.findByUid(uid);
-        UserFriendEntity userFriend = userFriendRepository.findByUid(uid);
-        user.setUserHome(userHome);
-        user.setUserFriend(userFriend);
-        return user;
+//        UserEntity user = userRepository.findOne(uid);
+//        UserHomeEntity userHome = userHomeRepository.findByUid(uid);
+//        UserFriendEntity userFriend = userFriendRepository.findByUid(uid);
+//        user.setUserHome(userHome);
+//        user.setUserFriend(userFriend);
+        return null;
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * 开启MongoDB的JPA支持
  * Created by BG307435 on 2018/2/9.
  */
-@Configuration
-@EnableMongoRepositories(basePackageClasses = UserRepository.class)
+//@Configuration
+//@EnableMongoRepositories(basePackageClasses = UserRepository.class)
 public class MongoConfig {
 }
