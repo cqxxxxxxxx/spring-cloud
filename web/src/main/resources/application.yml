@@ -14,6 +14,16 @@ eureka:
 spring:
   application:
     name: web
+  sleuth:
+    enabled: true
+    sampler:
+      probability: 1.0
+  zipkin:
+    base-url: http://localhost:9411/
+    sender:
+      type: web
+    enabled: true
+    discovery-client-enabled: false
 ##   加载规则config-server端，1.application.yml中指定profile; 2.{application.name】-{profile}-{label}.yml(这里是web-dev.yml)中指定profile
 #  cloud:
 #    config:
@@ -49,7 +59,7 @@ server:
 
 logging:
   level:
-    root: debug
+    root: fatal
 #actuator 配置
 management:
   endpoints:

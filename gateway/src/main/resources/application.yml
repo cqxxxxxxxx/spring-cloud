@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+        - id: before_route
+          uri: http://www.baidu.com
+          predicates:
+          - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+        - id: path_route
+          uri: https://www.acfun.cn
+          predicates:
+          - Path=/foo/{segment},/bar/{segment}
+        - id: ingredients
+          uri: lb://ingredients
+          predicates:
+          - Path=//ingredients/**
+          filters:
+          - name: Hystrix
+            args:
+              name: fetchIngredients
+              fallbackUri: forward:/fallback
+        - id: ingredients-fallback
+          uri: http://localhost:9994
+          predicates:
+          - Path=/fallback

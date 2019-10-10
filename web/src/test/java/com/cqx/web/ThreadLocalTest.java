@@ -52,11 +52,15 @@ public class ThreadLocalTest {
                 // Task中可以读取，值是"value-set-in-parent"
                 String value = parent.get();
                 System.out.println("pooled:" + value);
+                parent.set("pooled: changed");
+                System.out.println("pooled:" + parent.get());
             }
         };
 // 额外的处理，生成修饰了的对象ttlRunnable
         Runnable ttlRunnable = TtlRunnable.get(task);
         executorService.submit(ttlRunnable);
+        TimeUnit.SECONDS.sleep(3);
+        System.out.println("main:" + parent.get());
     }
 
 
