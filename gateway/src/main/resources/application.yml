@@ -1,28 +1,59 @@
 spring:
   application:
     name: gateway
+  redis:
+    host: ${REDIS_HOST:10.10.0.218}
+    port: ${REDIS_PORT:6379}
+    #password: ${REDIS_PASSWORD:}
   cloud:
     gateway:
       enabled: true
       routes:
+        ####  限流路由
+        - id: rate_limit_route
+          uri: http://www.youku.com
+          predicates:
+          - Path=/yk/**
+          filters:
+          - name: RequestRateLimiter
+          args:
+#           每秒添加令牌的数量
+            redis-rate-limiter.replenishRate: 10
+#           令牌桶最大数量
+            redis-rate-limiter.burstCapacity: 20
+            rate-limiter: "#{@cqxxxxxxxxRateLimiter}"
+            key-resolver: "#{@cqxxxxxxxxKeyResolver}"
+        ####  predicate 示例
         - id: before_route
           uri: http://www.baidu.com
           predicates:
           - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+        ####  predicate 示例
         - id: path_route
           uri: https://www.acfun.cn
           predicates:
           - Path=/foo/{segment},/bar/{segment}
-        - id: ingredients
-          uri: lb://ingredients
+        ####  hystrix熔断 示例
+        - id: hystrix
+          uri: http://bilibili.com
           predicates:
-          - Path=//ingredients/**
+          - Path=/bbb/**
           filters:
+          - StripPrefix=1
           - name: Hystrix
             args:
-              name: fetchIngredients
+              name: cqxbbbcmd
               fallbackUri: forward:/fallback
-        - id: ingredients-fallback
-          uri: http://localhost:9994
+        #### 熔断的fallback路由
+        - id: fallback_route
+          uri: http://www.baidu.com
           predicates:
           - Path=/fallback
+          filters:
+          - StripPrefix=1
+### 设置 cqxbbcmd 的超时时间为10ms
+hystrix.command.cqxbbbcmd.execution.isolation.thread.timeoutInMilliseconds: 10
+debug: true
+logging:
+  level:
+    root: debug
