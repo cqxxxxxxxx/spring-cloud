@@ -1,3 +1,38 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  level:
+    root: debug
+  path: logs/
+  file:
+    max-size: 1GB
+
+
+---
+spring:
+  profiles: peer0
+  application:
+    name: peer0
+eureka:
+  instance:
+#    hostname: peer0
+    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
+    lease-renewal-interval-in-seconds: 2 #配置在服务提供端，renew的频率 这里是2s发一次
+    metadata-map:
+      zone: hangzhou  #指定zone
+  client:
+    serviceUrl:
+      #peer对端的eureka服务，高可用;
+      #不同机器上建议使用EUREKA_PEER环境变量来修改
+      defaultZone: http://${EUREKA_PEER:sc-eureka1}:8761/eureka/
+    prefer-same-zone-eureka: true   #更加倾向调用同一个zone的服务
+  server:
+    eviction-interval-timer-in-ms: 10000  #配置在euraka-server端失效时间 10s扫描一次有没有失效服务，检测标准就是超过配置在服务端的失效时间没有renew的服务
+server:
+  port: ${EUREKA_PORT:8761}
 ---
 spring:
   profiles: peer1
@@ -5,30 +40,16 @@ spring:
     name: peer1
 eureka:
   instance:
-    hostname: peer1
+#    hostname: peer1
     lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
     lease-renewal-interval-in-seconds: 2 #配置在服务提供端，renew的频率 这里是2s发一次
+    metadata-map:
+      zone: shanghai
   client:
     serviceUrl:
-      defaultZone: http://peer2:9002/eureka/
+      defaultZone: http://${EUREKA_PEER:sc-eureka0}:8761/eureka/
+    prefer-same-zone-eureka: true
   server:
     eviction-interval-timer-in-ms: 10000  #配置在euraka-server端失效时间 10s扫描一次有没有失效服务，检测标准就是超过配置在服务端的失效时间没有renew的服务
 server:
-  port: 9001
----
-spring:
-  profiles: peer2
-  application:
-    name: peer2
-eureka:
-  instance:
-    hostname: peer2
-    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
-    lease-renewal-interval-in-seconds: 2 #配置在服务提供端，renew的频率 这里是2s发一次
-  client:
-    serviceUrl:
-      defaultZone: http://peer1:9001/eureka/
-  server:
-    eviction-interval-timer-in-ms: 10000  #配置在euraka-server端失效时间 10s扫描一次有没有失效服务，检测标准就是超过配置在服务端的失效时间没有renew的服务
-server:
-  port: 9002
+  port: 8761

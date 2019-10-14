@@ -50,10 +50,35 @@ spring:
           predicates:
           - Path=/fallback
           filters:
-          - StripPrefix=1
+            - StripPrefix=1
 ### 设置 cqxbbcmd 的超时时间为10ms
 hystrix.command.cqxbbbcmd.execution.isolation.thread.timeoutInMilliseconds: 10
-debug: true
+
+eureka:
+  client:
+    serviceUrl:
+      #Authenticating with the Eureka Server => 需要eureka-server端进行添加支持
+      #http://user:password@localhost:8761/eureka 基于http的authentication会自动触发，如果你的路径是这样写的。
+      #如果要更加复杂的服务注册认证，需要1. create a @Bean of type DiscoveryClientOptionalArgs =>  2. inject ClientFilter instances into it
+      defaultZone: ${EUREKA_URL1},${EUREKA_URL2}
+    prefer-same-zone-eureka: true #倾向于调用同一个zone的服务
+  instance:
+    hostname: gateway
+    lease-expiration-duration-in-seconds: 6  #配置在服务提供端, 失效时间 6s内没有发renew就认为该服务失效
+    lease-renewal-interval-in-seconds: 2  #配置在服务提供端，renew的频率 这里是2s发一次
+    health-check-url: ${server.servletPath}/health
+    status-page-url: ${server.servletPath}/info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 logging:
   level:
     root: debug
+  path: logs/
+  file:
+    max-size: 1GB
+server:
+  port: 8443
