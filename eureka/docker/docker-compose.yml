@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  sc-eureka0:
+    image: cqx/eureka
+    container_name: sc-eureka0
+    networks:
+      - cqx-net
+    environment:
+      JAVA_OPTS: -Xmx512m -Xms512m -Xss512k -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=peer0
+      TZ: Asia/Shanghai
+      EUREKA_PEER: sc-eureka1
+    ports:
+      - 9001:8761
+  sc-eureka1:
+    image: cqx/eureka
+    container_name: sc-eureka1
+    networks:
+      - cqx-net
+    environment:
+      JAVA_OPTS: -Xmx512m -Xms512m -Xss512k -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=peer1
+      TZ: Asia/Shanghai
+    ports:
+      - 9002:8761
+
+networks:
+  cqx-net:
+    external: true

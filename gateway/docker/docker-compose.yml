@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  sc-gateway:
+    image: cqx/gateway
+    container_name: sc-gateway
+    networks:
+      - cqx-net
+    environment:
+      JAVA_OPTS: -Xmx512m -Xms512m -Xss512k -Djava.security.egd=file:/dev/./urandom
+      TZ: Asia/Shanghai
+      EUREKA_URL0: http://sc-eureka0:8761/eureka/
+      EUREKA_URL1: http://sc-eureka1:8761/eureka/
+    ports:
+      - 8443:8443
+
+networks:
+  cqx-net:
+    external: true
